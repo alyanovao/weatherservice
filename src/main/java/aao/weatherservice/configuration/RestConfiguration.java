@@ -1,4 +1,4 @@
-package aao.weatherservice.controller.configuration;
+package aao.weatherservice.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

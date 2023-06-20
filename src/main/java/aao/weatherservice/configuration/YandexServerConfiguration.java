@@ -1,4 +1,4 @@
-package aao.weatherservice.controller.configuration;
+package aao.weatherservice.configuration;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;

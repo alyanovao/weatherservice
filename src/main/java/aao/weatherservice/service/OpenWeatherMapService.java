@@ -1,6 +1,6 @@
 package aao.weatherservice.service;
 
-import aao.weatherservice.controller.configuration.ServerConfiguration;
+import aao.weatherservice.configuration.ServerConfiguration;
 import aao.weatherservice.dto.openmap.OpenMapDto;
 import aao.weatherservice.dto.Weather;
 import lombok.val;

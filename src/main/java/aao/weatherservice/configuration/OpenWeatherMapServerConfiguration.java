@@ -1,4 +1,4 @@
-package aao.weatherservice.controller.configuration;
+package aao.weatherservice.configuration;
 
 import lombok.Getter;
 import lombok.Setter;

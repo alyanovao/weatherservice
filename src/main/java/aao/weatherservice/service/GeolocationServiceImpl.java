@@ -1,10 +1,8 @@
 package aao.weatherservice.service;
 
-import aao.weatherservice.controller.configuration.ServerConfiguration;
+import aao.weatherservice.configuration.ServerConfiguration;
 import aao.weatherservice.dto.PlaceDto;
-import aao.weatherservice.dto.Weather;
 import aao.weatherservice.dto.yandex.geocode.GeocodeResponse;
-import aao.weatherservice.dto.yandex.weather.YandexDto;
 import aao.weatherservice.exception.ApplicationException;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
@@ -22,68 +20,28 @@ import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.ParseException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 @Slf4j
 @Service
-public class YandexApiServiceImpl implements YandexApiService {
+public class GeolocationServiceImpl implements GeolocationService {
 
     @Value("${app.format}")
     private String format;
 
     private final RestOperations rest;
-    private final ServerConfiguration weatherConfiguration;
-    private final ServerConfiguration geocoderConfiguration;
+    private final ServerConfiguration geolocationServerConfiguration;
 
-    public YandexApiServiceImpl(@Qualifier(value = "getRestOperation") RestOperations rest,
-                                @Qualifier(value = "yandexServerConfiguration") ServerConfiguration weatherConfiguration,
-                                @Qualifier(value = "geoCoderServerConfiguration") ServerConfiguration geocoderConfiguration) {
+    public GeolocationServiceImpl(@Qualifier(value = "getRestOperation") RestOperations rest,
+                                  @Qualifier(value = "geolocationServerConfiguration") ServerConfiguration geolocationServerConfiguration) {
         this.rest = rest;
-        this.weatherConfiguration = weatherConfiguration;
-        this.geocoderConfiguration = geocoderConfiguration;
+        this.geolocationServerConfiguration = geolocationServerConfiguration;
     }
 
     @Override
-    public List<Weather> getWeather(PlaceDto place) {
-
+    public PlaceDto getPlaceByCityName(String city) {
         Map<String, Object> params = new HashMap<>();
-        params.put("lat", place.getLatitude());
-        params.put("lon", place.getLongitude());
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.set("X-Yandex-API-Key", weatherConfiguration.getApiKey());
-
-        HttpEntity<String> request = new HttpEntity<>(headers);
-
-        try {
-            val response = rest.exchange(weatherConfiguration.getConfiguration(),
-                    HttpMethod.GET,
-                    request,
-                    YandexDto.class, params);
-            val body = response.getBody();
-            val fact = Objects.requireNonNull(body).getFact();
-            val weather = Weather.builder().city(place.getCity())
-                    .temperature(fact.getTemp())
-                    .windSpeed(fact.getWindSpeed())
-                    .condition(fact.getCondition())
-                    .source(weatherConfiguration.getName())
-                    .build();
-
-            return List.of(weather);
-        }
-        catch (Exception e) {
-            log.error(e.getMessage(), e.getStackTrace());
-            throw new ApplicationException(e);
-        }
-    }
-
-    @Override
-    public PlaceDto getPlace(String city) {
-        Map<String, Object> params = new HashMap<>();
-        params.put("api-key", geocoderConfiguration.getApiKey());
+        params.put("api-key", geolocationServerConfiguration.getApiKey());
         params.put("city", city);
         params.put("format", format);
 
@@ -91,10 +49,10 @@ public class YandexApiServiceImpl implements YandexApiService {
         headers.setContentType(MediaType.APPLICATION_JSON);
 
         HttpEntity<String> request = new HttpEntity<>(headers);
-        val url = geocoderConfiguration.getConfiguration();
 
         try {
-            val response = rest.exchange(url,
+            val response = rest.exchange(
+                    geolocationServerConfiguration.getConfiguration(),
                     HttpMethod.GET,
                     request,
                     GeocodeResponse.class, params);
