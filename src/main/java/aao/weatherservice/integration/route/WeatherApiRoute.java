@@ -2,8 +2,9 @@ package aao.weatherservice.integration.route;
 
 import aao.weatherservice.common.Constant;
 import aao.weatherservice.configuration.ServerConfiguration;
-import aao.weatherservice.integration.processor.PrepareQueryProcessor;
+import aao.weatherservice.configuration.WeatherApiServerConfiguration;
 import aao.weatherservice.dto.weatherapi.WeatherDto;
+import aao.weatherservice.integration.processor.PrepareQueryProcessor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.apache.camel.CamelContext;
@@ -11,10 +12,12 @@ import org.apache.camel.Exchange;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.model.dataformat.JsonLibrary;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
+@ConditionalOnBean(WeatherApiServerConfiguration.class)
 public class WeatherApiRoute extends RouteBuilder {
 
     private final ServerConfiguration configuration;

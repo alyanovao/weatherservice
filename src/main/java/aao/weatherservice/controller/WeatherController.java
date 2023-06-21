@@ -14,9 +14,10 @@ import java.util.List;
 
 @RestController
 public class WeatherController {
+
     private final WeatherService service;
 
-    public WeatherController(@Qualifier(value = "aggregateWeatherService") WeatherService service) {
+    public WeatherController(@Qualifier(value = "${app.weather.resource}") WeatherService service) {
         this.service = service;
     }
 

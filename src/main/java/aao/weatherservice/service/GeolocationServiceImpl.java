@@ -1,6 +1,7 @@
 package aao.weatherservice.service;
 
 import aao.weatherservice.configuration.ServerConfiguration;
+import aao.weatherservice.configuration.YandexServerConfiguration;
 import aao.weatherservice.dto.PlaceDto;
 import aao.weatherservice.dto.yandex.geocode.GeocodeResponse;
 import aao.weatherservice.exception.ApplicationException;
@@ -8,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -24,6 +26,7 @@ import java.util.Map;
 
 @Slf4j
 @Service
+@ConditionalOnBean(YandexServerConfiguration.class)
 public class GeolocationServiceImpl implements GeolocationService {
 
     @Value("${app.format}")

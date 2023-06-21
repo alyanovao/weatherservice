@@ -1,12 +1,14 @@
 package aao.weatherservice.service;
 
 import aao.weatherservice.configuration.ServerConfiguration;
+import aao.weatherservice.configuration.YandexServerConfiguration;
 import aao.weatherservice.dto.Weather;
 import aao.weatherservice.dto.yandex.weather.YandexDto;
 import aao.weatherservice.exception.ApplicationException;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -20,7 +22,8 @@ import java.util.Map;
 import java.util.Objects;
 
 @Slf4j
-@Service
+@Service("yandex")
+@ConditionalOnBean(YandexServerConfiguration.class)
 public class YandexWeatherService implements WeatherService {
 
     private final RestOperations restTemplate;

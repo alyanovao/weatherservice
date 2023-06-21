@@ -2,12 +2,14 @@ package aao.weatherservice.service;
 
 import aao.weatherservice.dto.Weather;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
+@Service("all")
 @RequiredArgsConstructor
+@ConditionalOnProperty(prefix = "app.weather", value = "resource", havingValue = "all")
 public class AggregateWeatherService implements WeatherService {
     private final List<WeatherService> services;
 

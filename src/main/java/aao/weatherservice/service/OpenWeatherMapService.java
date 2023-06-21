@@ -1,11 +1,13 @@
 package aao.weatherservice.service;
 
+import aao.weatherservice.configuration.OpenWeatherMapServerConfiguration;
 import aao.weatherservice.configuration.ServerConfiguration;
-import aao.weatherservice.dto.openmap.OpenMapDto;
 import aao.weatherservice.dto.Weather;
+import aao.weatherservice.dto.openmap.OpenMapDto;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestOperations;
 
@@ -14,7 +16,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-@Service
+@Service("openWeatherMap")
+@ConditionalOnBean(OpenWeatherMapServerConfiguration.class)
 public class OpenWeatherMapService implements WeatherService {
 
     private final RestOperations restTemplate;
@@ -23,7 +26,7 @@ public class OpenWeatherMapService implements WeatherService {
     @Value(value = "${app.unit}")
     private String unit;
 
-    public OpenWeatherMapService(@Qualifier(value = "getRestOperation") RestOperations restTemplate,
+    public OpenWeatherMapService(RestOperations restTemplate,
                                  @Qualifier(value = "openWeatherMapServerConfiguration") ServerConfiguration configuration) {
         this.restTemplate = restTemplate;
         this.configuration = configuration;

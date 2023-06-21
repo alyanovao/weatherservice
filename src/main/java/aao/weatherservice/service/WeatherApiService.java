@@ -1,20 +1,23 @@
 package aao.weatherservice.service;
 
 import aao.weatherservice.configuration.ServerConfiguration;
-import aao.weatherservice.exception.ApplicationException;
+import aao.weatherservice.configuration.WeatherApiServerConfiguration;
 import aao.weatherservice.dto.Weather;
 import aao.weatherservice.dto.WindDto;
 import aao.weatherservice.dto.weatherapi.WeatherDto;
+import aao.weatherservice.exception.ApplicationException;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.apache.camel.ProducerTemplate;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Slf4j
-@Service
+@Service("weatherapi")
+@ConditionalOnBean(WeatherApiServerConfiguration.class)
 public class WeatherApiService implements WeatherService {
 
     private final ProducerTemplate template;
